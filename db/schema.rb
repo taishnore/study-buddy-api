@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2019_05_19_020056) do
 
   create_table "days", force: :cascade do |t|
-    t.date "today"
+    t.date "date"
     t.integer "session_id"
     t.integer "time_studied", default: 0
     t.integer "problems", default: 0
