@@ -14,8 +14,10 @@ class Api::V1::SessionsController < ApplicationController
     @session = Session.find(params[:id])
     if session_params[:type] == "increment_problems"
       @session.update(problems: @session.problems += 1)
+      @session.days.last.update(problems: @session.days.last.problems += 1)
       @session.reload
-      render json: @session.problems
+      @session.days.reload
+      render json: {total: @session.problems, today: @session.days.last.problems}
     elsif session_params[:type] == "add_time"
       @session.update(hours: @session.hours += session_params[:hours])
       @session.days.last.update(time_studied: @session.days.last.time_studied += session_params[:hours])
