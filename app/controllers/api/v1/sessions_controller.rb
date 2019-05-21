@@ -21,8 +21,21 @@ class Api::V1::SessionsController < ApplicationController
       @session.reload
       render json: @session.hours
     end
-
   end
+
+  def days
+    @today = Date.today
+    @session = Session.find(session_params[:id])
+    if !@session.days.find{|day| day.date === @today}
+      Day.create(session_id: session_params[:id], date: Date.today)
+    end
+    @session.days.reload
+    @days = @session.days
+    render json: @days
+  end
+
+
+
 
 private
 
