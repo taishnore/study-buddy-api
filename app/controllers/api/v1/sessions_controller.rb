@@ -18,8 +18,10 @@ class Api::V1::SessionsController < ApplicationController
       render json: @session.problems
     elsif session_params[:type] == "add_time"
       @session.update(hours: @session.hours += session_params[:hours])
+      @session.days.last.update(time_studied: @session.days.last.time_studied += session_params[:hours])
       @session.reload
-      render json: @session.hours
+      @session.days.reload
+      render json: { hours: @session.hours, time_today: @session.days.last.time_studied }
     end
   end
 
