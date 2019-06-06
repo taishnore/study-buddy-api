@@ -23,7 +23,7 @@ class Api::V1::SessionsController < ApplicationController
       @session.days.last.update(time_studied: @session.days.last.time_studied += session_params[:hours])
       @session.reload
       @session.days.reload
-      render json: { hours: @session.hours, time_today: @session.days.last.time_studied }
+      render json: { id: @session.id, hours: @session.hours, time_today: @session.days.last.time_studied }
     end
   end
 
@@ -38,13 +38,17 @@ class Api::V1::SessionsController < ApplicationController
     render json: @days
   end
 
+  def create
+    @session = Session.create(title: session_params[:title])
+    render json: @session
+  end
 
 
 
 private
 
   def session_params
-    params.require(:session).permit(:id, :type, :hours)
+    params.require(:session).permit(:id, :type, :hours, :title)
   end
 
 end
